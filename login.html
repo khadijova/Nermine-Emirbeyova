@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş | Nərminə Əmirbəyova</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="login-card">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <h1>Şagird Portalı</h1>
+            <p>Müəllim: <span>Nərminə Əmirbəyova</span></p>
+        </div>
+
+        <form action="/login" method="POST">
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" name="name" placeholder="Adınız" required>
+            </div>
+            
+            <div class="input-group">
+                <i class="fas fa-id-card"></i>
+                <input type="text" name="surname" placeholder="Soyadınız" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" placeholder="Parol" required>
+            </div>
+
+            <button type="submit" class="login-btn">
+                Sistemə daxil ol <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+        
+        <div class="footer">
+            <p>&copy; Xədicə Abbaszadə tərəfindən Hazırlanıb. </p>
+        </div>
+    </div>
+</body>
+</html>
