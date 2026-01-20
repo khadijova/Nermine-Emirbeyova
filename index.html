@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giriş | Nərminə Əmirbəyova</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -17,20 +17,20 @@
             <p>Müəllim: <span>Nərminə Əmirbəyova</span></p>
         </div>
 
-        <form action="/login" method="POST">
+        <form id="loginForm">
             <div class="input-group">
                 <i class="fas fa-user"></i>
-                <input type="text" name="name" placeholder="Adınız" required>
+                <input type="text" id="name" placeholder="Adınız" required>
             </div>
             
             <div class="input-group">
                 <i class="fas fa-id-card"></i>
-                <input type="text" name="surname" placeholder="Soyadınız" required>
+                <input type="text" id="surname" placeholder="Soyadınız" required>
             </div>
 
             <div class="input-group">
                 <i class="fas fa-lock"></i>
-                <input type="password" name="password" placeholder="Parol" required>
+                <input type="password" id="password" placeholder="Parol" required>
             </div>
 
             <button type="submit" class="login-btn">
@@ -39,7 +39,7 @@
         </form>
         
         <div class="footer">
-            <p>&copy; Xədicə Abbaszadə tərəfindən Hazırlanıb. </p>
+            <p>&copy; 2024 Nərminə Əmirbəyova Tədris Sistemi</p>
         </div>
     </div>
 </body>
