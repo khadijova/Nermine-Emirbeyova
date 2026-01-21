@@ -1,62 +1,82 @@
-const quizData = [
-    {
-        question: "Azərbaycanın paytaxtı haradır?",
-        options: { a: "Gəncə", b: "Bakı", c: "Sumqayıt", d: "Şəki" },
-        correct: "b"
-    },
-    {
-        question: "Nərminə müəllimə hansı fənni tədris edir?",
-        options: { a: "Riyaziyyat", b: "Azərbaycan dili", c: "İngilis dili", d: "Tarix" },
-        correct: "b"
-    }
+// 1. Şagird Məlumatları
+const students = [
+    { name: "Ali", surname: "Aliyev", password: "123" },
+    { name: "Aysel", surname: "Memmedova", password: "456" }
 ];
 
-let currentQuiz = 0;
+// 2. Test Sualları
+const questions = [
+    { q: "Azərbaycanın paytaxtı haradır?", a: "Gəncə", b: "Bakı", c: "Sumqayıt", d: "Şəki", correct: "b" },
+    { q: "Nərminə müəllimə hansı fənni keçir?", a: "Riyaziyyat", b: "Fizika", c: "Azərbaycan dili", d: "Tarix", correct: "c" }
+];
+
+let currentQIndex = 0;
 let score = 0;
+let selectedAnswer = null;
 
-document.addEventListener('DOMContentLoaded', () => {
-    const currentUser = localStorage.getItem('currentUser');
-    if (!currentUser) {
-        window.location.href = 'index.html';
-        return;
-    }
+// --- GİRİŞ MƏNTİQİ ---
+const loginForm = document.getElementById('loginForm');
+if (loginForm) {
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const surname = document.getElementById('surname').value;
+        const pass = document.getElementById('password').value;
 
-    document.getElementById('student-name').innerText = "Şagird: " + currentUser;
-    loadQuiz();
-});
-
-function loadQuiz() {
-    const currentData = quizData[currentQuiz];
-    document.querySelector('.question-number').innerText = `Sual ${currentQuiz + 1} / ${quizData.length}`;
-    document.getElementById('question-text').innerText = currentData.question;
-    
-    // Variantları dinamik yükləmək üçün (HTML-dəki radio düymələrini tapırıq)
-    const optionsTexts = document.querySelectorAll('.option-text');
-    optionsTexts[0].innerText = currentData.options.a;
-    optionsTexts[1].innerText = currentData.options.b;
-    optionsTexts[2].innerText = currentData.options.c;
-    optionsTexts[3].innerText = currentData.options.d;
+        const user = students.find(s => s.name === name && s.surname === surname && s.password === pass);
+        
+        if (user) {
+            localStorage.setItem('loggedUser', name + " " + surname);
+            window.location.href = "quiz.html";
+        } else {
+            alert("Məlumatlar yanlışdır!");
+        }
+    });
 }
 
-document.querySelector('.next').addEventListener('click', () => {
-    const selectedOption = document.querySelector('input[name="quiz"]:checked');
-    
-    if (selectedOption) {
-        if (selectedOption.value === quizData[currentQuiz].correct) {
-            score++;
-        }
-        
-        currentQuiz++;
-        selectedOption.checked = false;
+// --- TEST MƏNTİQİ ---
+const qText = document.getElementById('q-text');
+const optionsContainer = document.getElementById('options-container');
 
-        if (currentQuiz < quizData.length) {
-            loadQuiz();
+if (qText) {
+    document.getElementById('user-name').innerText = localStorage.getItem('loggedUser');
+    loadQuestion();
+}
+
+function loadQuestion() {
+    const qData = questions[currentQIndex];
+    document.getElementById('q-number').innerText = `Sual ${currentQIndex + 1} / ${questions.length}`;
+    qText.innerText = qData.q;
+    optionsContainer.innerHTML = "";
+    selectedAnswer = null;
+
+    ['a', 'b', 'c', 'd'].forEach(key => {
+        const btn = document.createElement('div');
+        btn.className = 'option';
+        btn.innerText = qData[key];
+        btn.onclick = () => {
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedAnswer = key;
+        };
+        optionsContainer.appendChild(btn);
+    });
+}
+
+const nextBtn = document.getElementById('next-btn');
+if (nextBtn) {
+    nextBtn.onclick = () => {
+        if (!selectedAnswer) return alert("Zəhmət olmasa bir variant seçin!");
+        
+        if (selectedAnswer === questions[currentQIndex].correct) score++;
+        
+        currentQIndex++;
+        if (currentQIndex < questions.length) {
+            loadQuestion();
         } else {
-            alert(`Test bitdi! ${localStorage.getItem('currentUser')}, nəticən: ${score}/${quizData.length}`);
-            localStorage.removeItem('currentUser');
-            window.location.href = 'index.html';
+            alert(`Test bitdi! Nəticəniz: ${score} / ${questions.length}`);
+            localStorage.removeItem('loggedUser');
+            window.location.href = "index.html";
         }
-    } else {
-        alert("Zəhmət olmasa bir variant seçin!");
-    }
-});
+    };
+}
